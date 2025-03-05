@@ -1,0 +1,27 @@
+snc_redis:
+  clients:
+    default:
+      type: predis
+      alias: default
+      dsn: redis://127.0.0.1:6379
+      options:
+        prefix: localflowtest_
+        read_write_timeout: 10
+        connection_timeout: 5
+        connection_async: false
+        connection_persistent: false
+        throw_errors: true
+        serialization: default
+  class:
+    client: Predis\Client
+    client_options: Predis\Configuration\Options
+    connection_parameters: Predis\Connection\Parameters
+    connection_factory: Snc\RedisBundle\Client\Predis\Connection\ConnectionFactory
+    connection_wrapper: Snc\RedisBundle\Client\Predis\Connection\ConnectionWrapper
+    phpredis_client: Redis
+    relay_client: Relay\Relay
+    phpredis_clusterclient: RedisCluster
+    logger: Snc\RedisBundle\Logger\RedisLogger
+    data_collector: Snc\RedisBundle\DataCollector\RedisDataCollector
+    monolog_handler: Monolog\Handler\RedisHandler
+
