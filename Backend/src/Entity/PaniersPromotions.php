@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PaniersPromotionsRepository;
+use App\Repository\PromotionsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PaniersPromotionsRepository::class)]

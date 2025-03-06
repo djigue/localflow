@@ -15,28 +15,29 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class PaniersServicesController extends AbstractController
 {
-    #[Route('/api/panier/ajoutService/{id}', name: 'api_panier_ajout_service', methods: ['POST'])]
-    public function ajouterService(int $id, Request $request, ServicesRepository $serviceRepository, EntityManagerInterface $em): JsonResponse
+    #[Route('/api/panier/ajoutService', name: 'api_panier_ajout_service', methods: ['POST'])]
+    public function ajouterService(Request $request, ServicesRepository $serviceRepository, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        $service = $serviceRepository->find($id);
+        $utilisateur = $em->getRepository(Utilisateur::class)->find($data['userId']);
+        $service = $serviceRepository->find($data['serviceId']);
+        $quantite = $data['quantite'];
 
         if (!$service) {
             return new JsonResponse(['error' => 'Service non trouvé'], 404);
         }
 
-        $quantite = $data['quantite'];
         $panier = $em->getRepository(PaniersServices::class)->findOneBy([
-            'utilisateur' => $data['utilisateurId'],
+            'utilisateur' => $utilisateur,
             'service' => $service,
         ]);
 
         if ($panier) {
-            $panier->setQuantité($quantite);
+            $panier->setQuantite($quantite);
         } else { 
         $panier = new PaniersServices();
-        $panier->setUtilisateur($data['utilisateurId']);  
+        $panier->setUtilisateur($utilisateur);  
         $panier->setService($service);
         $panier->setQuantite($quantite);
         $em->persist($panier);

@@ -15,28 +15,28 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class PaniersPromotionsController extends AbstractController
 {
-    #[Route('/api/panier/ajoutPromotion/{id}', name: 'api_panier_ajout_promotion', methods: ['POST'])]
-    public function ajouterPromotion(int $id, Request $request, PromotionsRepository $promotionRepository, EntityManagerInterface $em): JsonResponse
+    #[Route('/api/panier/ajoutPromotion', name: 'api_panier_ajout_promotion', methods: ['POST'])]
+    public function ajouterPromotion(Request $request, PromotionsRepository $promotionRepository, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
-        $promotion = $promotionRepository->find($id);
+        $utilisateur = $em->getRepository(Utilisateur::class)->find($data['userId']);
+        $promotion = $promotionRepository->find($data['promotionId']);
+        $quantite = $data['quantite'];
 
         if (!$promotion) {
             return new JsonResponse(['error' => 'Promotion non trouvé'], 404);
         }
 
-        $quantite = $data['quantite'] ?? 1; 
         $panier = $em->getRepository(PaniersPromotions::class)->findOneBy([
-            'utilisateur' => $data['utilisateurId'],
-            'service' => $promotion,
+            'utilisateur' => $utilisateur,
+            'promotion' => $promotion,
         ]);
 
         if ($panier) {
             $panier->setQuantité($quantite);
         } else { 
             $panier = new PaniersPromotions();
-            $panier->setUtilisateur($data['utilisateurId']);
+            $panier->setUtilisateur($utilisateur);
             $panier->setPromotion($promotion);
             $panier->setQuantite($quantite);
         }

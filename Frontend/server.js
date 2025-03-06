@@ -345,6 +345,94 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('produits', async (userId) => {
+    console.log(`En route pour Produits`);
+  
+    try {
+      const response = await axios.get(`http://localhost:8000/api/produits`);
+      socket.emit('produitsResponse', response.data);
+      console.log("données recues : ", response.data )
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
+      socket.emit('produitsResponse', { error: "Erreur serveur" });
+    }
+  });
+
+  socket.on('services', async (userId) => {
+    console.log(`En route pour Services`);
+  
+    try {
+      const response = await axios.get(`http://localhost:8000/api/services`);
+      socket.emit('servicesResponse', response.data);
+      console.log("données recues : ", response.data )
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
+      socket.emit('servicesResponse', { error: "Erreur serveur" });
+    }
+  });
+
+  socket.on('promotions', async (userId) => {
+    console.log(`En route pour Promotions`);
+  
+    try {
+      const response = await axios.get(`http://localhost:8000/api/promotions`);
+      socket.emit('promotionsResponse', response.data);
+      console.log("données recues : ", response.data )
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
+      socket.emit('promotionsResponse', { error: "Erreur serveur" });
+    }
+  });
+
+  socket.on('ajoutProduitPanier', async (data) => {
+    console.log('📩 Formulaire ajout panier :', data);
+  
+    try {
+      const response = await axios.post(`http://localhost:8000/api/panier/ajoutProduit`, {
+        userId: data.userId,
+        produitId: data.produitId,
+        quantite: data.quantite,
+      });
+      socket.emit('ajoutProduitPanierResponse', { success: true, message: 'Produit ajouté au panier' });
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
+      socket.emit('ajoutProduitPanierResponse', { success: false, message: 'Erreur d\'ajout' });
+    }
+  });
+
+  socket.on('ajoutServicePanier', async (data) => {
+    console.log('📩 Formulaire ajout panier :', data);
+  
+    try {
+      const response = await axios.post(`http://localhost:8000/api/panier/ajoutService`, {
+        userId: data.userId,
+        serviceId: data.serviceId,
+        quantite: data.quantite,
+      });
+      socket.emit('ajoutServicePanierResponse', { success: true, message: 'Service ajouté au panier' });
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
+      socket.emit('ajoutServicePanierResponse', { success: false, message: 'Erreur d\'ajout' });
+    }
+  });
+
+  socket.on('ajoutPromotionPanier', async (data) => {
+    console.log('📩 Formulaire ajout panier :', data);
+  
+    try {
+      const response = await axios.post(`http://localhost:8000/api/panier/ajoutPromotion`, {
+        userId: data.userId,
+        promotionId: data.promotionId,
+        quantite: data.quantite,
+      });
+      socket.emit('ajoutPromotionPanierResponse', { success: true, message: 'Promotion ajouté au panier' });
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
+      socket.emit('ajoutPromotionPanierResponse', { success: false, message: 'Erreur d\'ajout' });
+    }
+  });
+
+
 
   socket.on('disconnect', () => {
     console.log('❌ Un client s\'est déconnecté');

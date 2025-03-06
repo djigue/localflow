@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import MyBouton from './MyBouton';
+import socket from '../../socket';
 
-const ServiceAjoutPanier = ({ serviceId, quantite }) => {
+const ServiceAjoutPanier = ({ serviceId, quantite, boutonTexte = "Ajouter au panier"}) => {
     const [message, setMessage] = useState('');
 
     useEffect(() => {
@@ -18,7 +19,7 @@ const ServiceAjoutPanier = ({ serviceId, quantite }) => {
         e.preventDefault();
         const userId =localStorage.getItem('id');
 
-        socket.emit('ajoutServicePanier', {userId, quantite});
+        socket.emit('ajoutServicePanier', {userId, serviceId, quantite});
       };
 
     return (

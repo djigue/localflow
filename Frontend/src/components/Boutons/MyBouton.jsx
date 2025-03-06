@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-const myBouton = ({nom, action, type}) => {
+const myBouton = ({nom, action, type ="button"}) => {
 
     return(
-        <button action={action}>{nom}</button>
+        <button type={type} onClick={action}>{nom}</button>
 )}
 
 export default myBouton;

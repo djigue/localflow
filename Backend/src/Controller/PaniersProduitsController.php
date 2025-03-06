@@ -14,20 +14,24 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class PaniersProduitsController extends AbstractController
 {
-    #[Route('/api/panier/ajoutProduit/{id}', name: 'api_panier_ajout_produit', methods: ['POST'])]
-    public function ajouterProduit(int $id, Request $request, ProduitsRepository $produitsRepository, EntityManagerInterface $em): JsonResponse
+    #[Route('/api/panier/ajoutProduit', name: 'api_panier_ajout_produit', methods: ['POST'])]
+    public function ajouterProduit(Request $request, ProduitsRepository $produitsRepository, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+        $utilisateur = $em->getRepository(Utilisateur::class)->find($data['userId']);
+        $produit = $produitsRepository->find($data['produitId']);
+        $quantite = $data['quantite']; 
 
-        $produit = $produitsRepository->find($id);
+        if (!$utilisateur) {
+            return $this->json(['error' => 'Utilisateur non trouvé'], 404);
+        }
 
         if (!$produit) {
             return new JsonResponse(['error' => 'Produit non trouvé'], 404);
         }
 
-        $quantite = $data['quantite']; 
         $panier = $em->getRepository(PaniersProduits::class)->findOneBy([
-            'utilisateur' => $data['utilisateurId'],
+            'utilisateur' => $data['userId'],
             'produit' => $produit,
         ]);
 
@@ -35,7 +39,7 @@ final class PaniersProduitsController extends AbstractController
             $panier->setQuantité($quantite);
         } else {
             $panier = new PaniersProduits();
-            $panier->setUtilisateur($data['utilisateurId']);  
+            $panier->setUtilisateur($utilisateur);  
             $panier->setProduit($produit);
             $panier->setQuantite($quantite);
         }

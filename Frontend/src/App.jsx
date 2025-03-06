@@ -4,15 +4,20 @@ import React, { useState, useEffect } from 'react';
 import Connexion from './components/Connexion';
 import InscUtil from './components/InscUtil';
 import Accueil from "./pages/Accueil";
+import AcceuilClient from "./pages/AcceuilClient";
 import NavBar from './components/NavBar';
 import CommerceForm from './components/CommerceForm';
 import EvenementForm from './components/EvenementForm';
 import ProduitForm from './components/ProduitForm';
 import PromotionForm from './components/PromotionForm';
+import Produits from './components/Produits';
+import Services from './components/Services';
+import Promotions from './components/Promotions';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const role = localStorage.getItem('role');
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -41,7 +46,13 @@ function App() {
             path="/"
             element={
               isAuthenticated ? (
-                <Accueil />
+                role === "client" ? (
+                  <AcceuilClient />
+                ) : role === "commercant" ? (
+                  <Accueil />
+                ) : (
+                  <Navigate to="/login" />
+                )
               ) : (
                 <Navigate to="/login" />
               )
@@ -60,6 +71,9 @@ function App() {
           <Route path="/formulaire/evenement" element={isAuthenticated ? <EvenementForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/formulaire/produit" element={isAuthenticated ? <ProduitForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/formulaire/promotion" element={isAuthenticated ? <PromotionForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="/produits" element={isAuthenticated ? <Produits /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="/services" element={isAuthenticated ? <Services/> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="/promotions" element={isAuthenticated ? <Promotions/> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
         </Routes>
       </Router>
     </div>
