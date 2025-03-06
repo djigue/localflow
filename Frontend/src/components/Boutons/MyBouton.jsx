@@ -4,4 +4,6 @@ const myBouton = ({nom, action, type}) => {
 
     return(
         <button action={action}>{nom}</button>
-    )}
+)}
+
+export default myBouton;

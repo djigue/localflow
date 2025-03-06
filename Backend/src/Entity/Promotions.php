@@ -52,9 +52,23 @@ class Promotions
     #[ORM\OneToMany(targetEntity: ImagesPromotions::class, mappedBy: 'promotion')]
     private Collection $imagesPromotions;
 
+    /**
+     * @var Collection<int, Panier>
+     */
+    #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'promotion')]
+    private Collection $paniers;
+
+    /**
+     * @var Collection<int, PaniersPromotions>
+     */
+    #[ORM\OneToMany(targetEntity: PaniersPromotions::class, mappedBy: 'promotion', orphanRemoval: true)]
+    private Collection $paniersPromotions;
+
     public function __construct()
     {
         $this->imagesPromotions = new ArrayCollection();
+        $this->paniers = new ArrayCollection();
+        $this->paniersPromotions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -206,6 +220,66 @@ class Promotions
             // set the owning side to null (unless already changed)
             if ($imagesPromotion->getPromotion() === $this) {
                 $imagesPromotion->setPromotion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Panier>
+     */
+    public function getPaniers(): Collection
+    {
+        return $this->paniers;
+    }
+
+    public function addPanier(Panier $panier): static
+    {
+        if (!$this->paniers->contains($panier)) {
+            $this->paniers->add($panier);
+            $panier->setPromotion($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): static
+    {
+        if ($this->paniers->removeElement($panier)) {
+            // set the owning side to null (unless already changed)
+            if ($panier->getPromotion() === $this) {
+                $panier->setPromotion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PaniersPromotions>
+     */
+    public function getPaniersPromotions(): Collection
+    {
+        return $this->paniersPromotions;
+    }
+
+    public function addPaniersPromotion(PaniersPromotions $paniersPromotion): static
+    {
+        if (!$this->paniersPromotions->contains($paniersPromotion)) {
+            $this->paniersPromotions->add($paniersPromotion);
+            $paniersPromotion->setPromotion($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaniersPromotion(PaniersPromotions $paniersPromotion): static
+    {
+        if ($this->paniersPromotions->removeElement($paniersPromotion)) {
+            // set the owning side to null (unless already changed)
+            if ($paniersPromotion->getPromotion() === $this) {
+                $paniersPromotion->setPromotion(null);
             }
         }
 

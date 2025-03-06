@@ -1,0 +1,1 @@
+const total = panier.reduce((acc, item) => acc + item.prix * item.quantité, 0);

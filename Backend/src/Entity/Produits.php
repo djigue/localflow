@@ -59,10 +59,24 @@ class Produits
     #[ORM\OneToMany(targetEntity: Promotions::class, mappedBy: 'produit')]
     private Collection $promotions;
 
+    /**
+     * @var Collection<int, Panier>
+     */
+    #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'produit')]
+    private Collection $paniers;
+
+    /**
+     * @var Collection<int, PaniersProduits>
+     */
+    #[ORM\OneToMany(targetEntity: PaniersProduits::class, mappedBy: 'produit', orphanRemoval: true)]
+    private Collection $paniersProduits;
+
     public function __construct()
     {
         $this->imagesProduits = new ArrayCollection();
         $this->promotions = new ArrayCollection();
+        $this->paniers = new ArrayCollection();
+        $this->paniersProduits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -244,6 +258,66 @@ class Produits
             // set the owning side to null (unless already changed)
             if ($promotion->getProduit() === $this) {
                 $promotion->setProduit(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Panier>
+     */
+    public function getPaniers(): Collection
+    {
+        return $this->paniers;
+    }
+
+    public function addPanier(Panier $panier): static
+    {
+        if (!$this->paniers->contains($panier)) {
+            $this->paniers->add($panier);
+            $panier->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): static
+    {
+        if ($this->paniers->removeElement($panier)) {
+            // set the owning side to null (unless already changed)
+            if ($panier->getProduit() === $this) {
+                $panier->setProduit(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PaniersProduits>
+     */
+    public function getPaniersProduits(): Collection
+    {
+        return $this->paniersProduits;
+    }
+
+    public function addPaniersProduit(PaniersProduits $paniersProduit): static
+    {
+        if (!$this->paniersProduits->contains($paniersProduit)) {
+            $this->paniersProduits->add($paniersProduit);
+            $paniersProduit->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaniersProduit(PaniersProduits $paniersProduit): static
+    {
+        if ($this->paniersProduits->removeElement($paniersProduit)) {
+            // set the owning side to null (unless already changed)
+            if ($paniersProduit->getProduit() === $this) {
+                $paniersProduit->setProduit(null);
             }
         }
 
