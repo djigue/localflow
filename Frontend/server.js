@@ -432,7 +432,31 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('panier', async (userId) => {
+    console.log(`📩 Demande d'informations pour le panier ${userId}`);
+  
+    try {
+      const response = await axios.get(`http://localhost:8000/api/panier/${userId}`);
+      socket.emit('panierResponse', response.data);
+      console.log("données recues : ", response.data )
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
+      socket.emit('panierResponse', { error: "Erreur serveur" });
+    }
+  });
 
+  socket.on('acceuilClient', async (userId) => {
+    console.log(`📩 Demande d'informations pour l' acceuil client, ${userId}`);
+  
+    try {
+      const response = await axios.get(`http://localhost:8000/api/acceuilClient/${userId}`);
+      socket.emit('acceuilClientResponse', response.data);
+      console.log("données recues : ", response.data )
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
+      socket.emit('acceuilClientResponse', { error: "Erreur serveur" });
+    }
+  });
 
   socket.on('disconnect', () => {
     console.log('❌ Un client s\'est déconnecté');

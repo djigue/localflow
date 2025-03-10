@@ -15,7 +15,7 @@ class Panier
 
     #[ORM\ManyToOne(inversedBy: 'paniers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?utilisateur $utilisateur = null;
+    private ?Utilisateur $utilisateur = null;
 
     #[ORM\ManyToOne(inversedBy: 'paniers')]
     private ?produits $produit = null;
@@ -24,7 +24,7 @@ class Panier
     private ?services $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'paniers')]
-    private ?promotions $promotion = null;
+    private ?Promotions $promotion = null;
 
     #[ORM\Column]
     private ?int $quantite = null;
@@ -34,48 +34,48 @@ class Panier
         return $this->id;
     }
 
-    public function getUtilisateur(): ?utilisateur
+    public function getUtilisateur(): ?Utilisateur
     {
         return $this->utilisateur;
     }
 
-    public function setUtilisateur(?utilisateur $utilisateur): static
+    public function setUtilisateur(?Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
 
         return $this;
     }
 
-    public function getProduit(): ?produits
+    public function getProduit(): ?Produits
     {
         return $this->produit;
     }
 
-    public function setProduit(?produits $produit): static
+    public function setProduit(?Produits $produit): static
     {
         $this->produit = $produit;
 
         return $this;
     }
 
-    public function getService(): ?services
+    public function getService(): ?Services
     {
         return $this->service;
     }
 
-    public function setService(?services $service): static
+    public function setService(?Services $service): static
     {
         $this->service = $service;
 
         return $this;
     }
 
-    public function getPromotion(): ?promotions
+    public function getPromotion(): ?Promotions
     {
         return $this->promotion;
     }
 
-    public function setPromotion(?promotions $promotion): static
+    public function setPromotion(?Promotions $promotion): static
     {
         $this->promotion = $promotion;
 

@@ -13,6 +13,7 @@ import PromotionForm from './components/PromotionForm';
 import Produits from './components/Produits';
 import Services from './components/Services';
 import Promotions from './components/Promotions';
+import Panier from './components/Panier';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -66,7 +67,8 @@ function App() {
           <Route path="/register" element={<InscUtil />} />
           
           {/* Formulaires protégés, accessibles uniquement si authentifié */}
-          <Route path="/accueil" element={isAuthenticated ? <Accueil /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="/acceuil" element={isAuthenticated ? <Accueil /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="/acceuilClient" element={isAuthenticated ? <AcceuilClient /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/formulaire/commerce" element={isAuthenticated ? <CommerceForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/formulaire/evenement" element={isAuthenticated ? <EvenementForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/formulaire/produit" element={isAuthenticated ? <ProduitForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
@@ -74,6 +76,7 @@ function App() {
           <Route path="/produits" element={isAuthenticated ? <Produits /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/services" element={isAuthenticated ? <Services/> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/promotions" element={isAuthenticated ? <Promotions/> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="/panier" element={isAuthenticated ? <Panier/> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
         </Routes>
       </Router>
     </div>

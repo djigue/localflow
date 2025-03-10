@@ -15,11 +15,11 @@ class PaniersServices
 
     #[ORM\ManyToOne(inversedBy: 'paniersServices')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?utilisateur $utilisateur = null;
+    private ?Utilisateur $utilisateur = null;
 
     #[ORM\ManyToOne(inversedBy: 'paniersServices')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?services $service = null;
+    private ?Services $service = null;
 
     #[ORM\Column]
     private ?int $quantite = null;
@@ -29,24 +29,24 @@ class PaniersServices
         return $this->id;
     }
 
-    public function getUtilisateur(): ?utilisateur
+    public function getUtilisateur(): ?Utilisateur
     {
         return $this->utilisateur;
     }
 
-    public function setUtilisateur(?utilisateur $utilisateur): static
+    public function setUtilisateur(?Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
 
         return $this;
     }
 
-    public function getService(): ?services
+    public function getService(): ?Services
     {
         return $this->service;
     }
 
-    public function setService(?services $service): static
+    public function setService(?Services $service): static
     {
         $this->service = $service;
 

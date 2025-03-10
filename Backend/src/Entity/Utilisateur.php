@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-#[ORM\Table(name: "utilisateur")]
+// #[ORM\Table(name: "utilisateur")]
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -206,12 +206,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAdresseId(): ?adresses
+    public function getAdresseId(): ?Adresses
     {
         return $this->adresse;
     }
 
-    public function setAdresseId(?adresses $adresse): static
+    public function setAdresseId(?Adresses $adresse): static
     {
         $this->adresse = $adresse;
 

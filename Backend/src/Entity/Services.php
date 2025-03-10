@@ -189,6 +189,17 @@ class Services
         return $this;
     }
 
+    public function setImage(?string $image): self
+    {
+        $firstImage = $this->imagesServices->first();
+
+        if ($firstImage) {
+            $firstImage->setUrl($image);
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Promotions>
      */

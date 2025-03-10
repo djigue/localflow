@@ -226,6 +226,17 @@ class Promotions
         return $this;
     }
 
+    public function setImage(?string $image): self
+    {
+        $firstImage = $this->imagesPromotions->first();
+
+        if ($firstImage) {
+            $firstImage->setUrl($image);
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Panier>
      */

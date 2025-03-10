@@ -33,7 +33,7 @@ final class PaniersPromotionsController extends AbstractController
         ]);
 
         if ($panier) {
-            $panier->setQuantité($quantite);
+            $panier->setQuantite($quantite);
         } else { 
             $panier = new PaniersPromotions();
             $panier->setUtilisateur($utilisateur);

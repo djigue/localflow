@@ -16,7 +16,7 @@ class PaniersPromotions
 
     #[ORM\ManyToOne(inversedBy: 'paniersPromotions')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?utilisateur $utilisateur = null;
+    private ?Utilisateur $utilisateur = null;
 
     #[ORM\ManyToOne(inversedBy: 'paniersPromotions')]
     #[ORM\JoinColumn(nullable: false)]
@@ -30,12 +30,12 @@ class PaniersPromotions
         return $this->id;
     }
 
-    public function getUtilisateur(): ?utilisateur
+    public function getUtilisateur(): ?Utilisateur
     {
         return $this->utilisateur;
     }
 
-    public function setUtilisateur(?utilisateur $utilisateur): static
+    public function setUtilisateur(?Utilisateur $utilisateur): static
     {
         $this->utilisateur = $utilisateur;
 

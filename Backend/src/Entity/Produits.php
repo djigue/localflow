@@ -234,6 +234,17 @@ class Produits
         return $this;
     }
 
+    public function setImage(?string $image): self
+    {
+        $firstImage = $this->imagesProduits->first();
+
+        if ($firstImage) {
+            $firstImage->setUrl($image);
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Promotions>
      */

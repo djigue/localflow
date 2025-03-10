@@ -6,7 +6,7 @@ const ShowPromotions = () => {
     console.log("🏠 Composant Promotion monté !");
     const [promotionsData, setPromotionsData] = useState(null);
     const [error, setError] = useState(null);
-    const [quantite, setQuantite] = useState(1);
+    const [quantites, setQuantites] = useState({});
     const userId = localStorage.getItem("id");
 
     useEffect(() => {
@@ -27,12 +27,19 @@ const ShowPromotions = () => {
     if (error) return <p>❌ {error}</p>;
     if (!promotionsData) return <p>Chargement...</p>;
 
+    const handleQuantiteChange = (promotionId, value) => {
+        setQuantites(prevQuantites => ({
+            ...prevQuantites,
+            [promotionId]: Math.max(value, 1)  
+        }));
+    };
+
     return (
         <div>
             <h1>Tous les promotions disponibles sur la plateforme</h1>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
                 {promotionsData.map((promotion) => (
-                    <div >
+                    <div key={promotion.id}>
                         {promotion.image && (
                             <img
                                 src={`http://localhost:8000${promotion.image}`}
@@ -52,11 +59,11 @@ const ShowPromotions = () => {
                         <p><strong>Quantité :</strong> {promotion.quantite}</p>
                         <input 
                             type="number" 
-                            value={quantite} 
-                            onChange={(e) => setQuantite(parseInt(e.target.value, 10) || 1)} 
+                            value={quantites[promotion.id] || 1}
+                            onChange={(e) => handleQuantiteChange(promotion.id, parseInt(e.target.value, 10))}
                             min="1"
                         />
-                        <PromotionAjoutPanier promotionId={promotion.id} quantite={quantite} boutonTexte="Ajouter au panier" />
+                        <PromotionAjoutPanier promotionId={promotion.id} quantite={quantites[promotion.id]} boutonTexte="Ajouter au panier" />
                     </div>
                 ))}
             </div>

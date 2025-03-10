@@ -6,7 +6,7 @@ const ShowServices = () => {
     console.log("🏠 Composant Service monté !");
     const [servicesData, setServicesData] = useState(null);
     const [error, setError] = useState(null);
-    const [quantite, setQuantite] = useState(1);
+    const [quantites, setQuantites] = useState({});
     const userId = localStorage.getItem("id");
 
     useEffect(() => {
@@ -25,12 +25,19 @@ const ShowServices = () => {
     if (error) return <p>❌ {error}</p>;
     if (!servicesData) return <p>Chargement...</p>;
 
+    const handleQuantiteChange = (serviceId, value) => {
+        setQuantites(prevQuantites => ({
+            ...prevQuantites,
+            [serviceId]: Math.max(value, 1)  
+        }));
+    };
+
     return (
         <div>
             <h1>Tous les services disponibles sur la plateforme</h1>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
                 {servicesData.map((service) => (
-                    <div >
+                    <div key={service.id}>
                         <h3>{service.nom}</h3>
                         {service.image && (
                             <img
@@ -52,11 +59,11 @@ const ShowServices = () => {
                         <p><strong>Durée :</strong> {service.duree} minutes</p>
                         <input 
                             type="number" 
-                            value={quantite} 
-                            onChange={(e) => setQuantite(parseInt(e.target.value, 10) || 1)} 
-                            min="1"
+                            value={quantites[service.id] || 1}
+                            onChange={(e) => handleQuantiteChange(service.id, parseInt(e.target.value, 10))}
+                            min="1" 
                         />
-                        <ServiceAjoutPanier serviceId={service.id} quantite={quantite} boutonTexte="Ajouter au panier" />
+                        <ServiceAjoutPanier serviceId={service.id} quantite={quantites[service.id]} boutonTexte="Ajouter au panier" />
                     </div>
                 ))}
             </div>
