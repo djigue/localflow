@@ -33,7 +33,7 @@ const Inscription = () => {
 
   return (
     <>
-    <BoutonBac/>
+    <BoutonBack/>
     <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
       <h2 className="text-xl font-bold">Inscription</h2>
       <form onSubmit={handleSubmit} className="space-y-4">

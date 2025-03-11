@@ -19,7 +19,7 @@ import PageAcceuilVisiteur from "./pages/PageAcceuilVisiteur";
 import FAQ from "./pages/FAQ";
 import Commandes from "./pages/Commandes";
 import AvisClientsPanel from "./pages/AvisClients";
-
+import AdminPanel from "./pages/PanelAdmin";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,49 +42,63 @@ function App() {
 
   return (
     <AuthProvider>
-    <div className="App">
-      <Router>
-        <NavbarTest isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
+      <div className="App">
+        <Router>
+          <NavbarTest isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
 
-        <Routes>
-          <Route path="/" element={<PageAcceuilVisiteur />} />
+          <Routes>
+            <Route path="/" element={<PageAcceuilVisiteur />} />
 
-          {/* Route protégée pour la page d'accueil */}
-          <Route
-            path="/accueil"
-            element={
-              isAuthenticated ? (
-                localStorage.getItem("role") === "commercant" ? (
-                  <Accueil /> // Page d'accueil commerçant
+            {/* Route protégée pour la page d'accueil */}
+            <Route
+              path="/accueil"
+              element={
+                isAuthenticated ? (
+                  localStorage.getItem("role") === "commercant" ? (
+                    <Accueil /> // Page d'accueil commerçant
+                  ) : (
+                    <PageAcceuilVisiteur /> // Page d'accueil visiteur
+                  )
                 ) : (
-                  <PageAcceuilVisiteur /> // Page d'accueil visiteur
+                  <Navigate to="/login" />
                 )
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
+              }
+            />
 
-          {/* Route pour la connexion */}
-          <Route
-            path="/login"
-            element={isAuthenticated ? <Navigate to="/accueil" /> : <Connexion setIsAuthenticated={setIsAuthenticated} />}
-          />
+            {/* Route pour la connexion */}
+            <Route
+              path="/login"
+              element={isAuthenticated ? <Navigate to="/accueil" /> : <Connexion setIsAuthenticated={setIsAuthenticated} />}
+            />
 
-          <Route path="/register" element={<InscUtil />} />
+            <Route path="/register" element={<InscUtil />} />
 
-          {/* Formulaires protégés, accessibles uniquement si authentifié */}
-          <Route path="/formulaire/commerce" element={isAuthenticated ? <CommerceForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="/formulaire/evenement" element={isAuthenticated ? <EvenementForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="/formulaire/produit" element={isAuthenticated ? <ProduitForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="/formulaire/promotion" element={isAuthenticated ? <PromotionForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="/FAQ" element={<FAQ />} />
-          <Route path="/commandes" element={<Commandes />} />
-          <Route path="/avis-clients" element={<AvisClientsPanel/>}/>
-          <Route path="/contact" element={<ContactForm/>}/>
-        </Routes>
-      </Router>
-    </div>
+            {/* Formulaires protégés, accessibles uniquement si authentifié */}
+            <Route path="/formulaire/commerce" element={isAuthenticated ? <CommerceForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/formulaire/evenement" element={isAuthenticated ? <EvenementForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/formulaire/produit" element={isAuthenticated ? <ProduitForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/formulaire/promotion" element={isAuthenticated ? <PromotionForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+            <Route path="/FAQ" element={<FAQ />} />
+            <Route path="/commandes" element={<Commandes />} />
+            <Route path="/avis-clients" element={<AvisClientsPanel />} />
+            <Route path="/contact" element={<ContactForm />} />
+
+            {/* Route pour le panneau admin */}
+            <Route
+              path="/panelAdmin"
+              element={
+                isAuthenticated && localStorage.getItem("role") === "admin" ? (
+                  <AdminPanel />  // Panneau administrateur
+                ) : (
+                  <Navigate to="/login" />  // Redirection si non authentifié ou pas admin
+                )
+                
+              }
+            />
+            
+          </Routes>
+        </Router>
+      </div>
     </AuthProvider>
   );
 }

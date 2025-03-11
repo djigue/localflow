@@ -73,11 +73,19 @@ final class UtilisateurController extends AbstractController
         $hashedPassword = $passwordHasher->hashPassword($utilisateur, $data['password']);
         $utilisateur->setPassword($hashedPassword);
 
+        
+// Vérification si c'est le premier utilisateur pour devenir admin
+$existingAdmin = $em->getRepository(Utilisateur::class)->findOneBy(['role' => 'admin']);
+if (!$existingAdmin) {
+    $utilisateur->setRole('admin');  // Si aucun admin n'existe, le premier inscrit devient admin
+}
+
         $em->persist($utilisateur);
         $em->flush();
 
         return new JsonResponse(['message' => 'Utilisateur créé avec succès'], 201);
     }
+
 
     #[Route('/api/utilisateur/connexion', name: 'api_utilisateur_connexion', methods: ['POST'])]
     public function connexion(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, SessionInterface $session): JsonResponse
