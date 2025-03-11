@@ -3,12 +3,23 @@ import React, { useState, useEffect } from 'react';
 
 import Connexion from './components/Connexion';
 import InscUtil from './components/InscUtil';
-import Accueil from "./pages/Accueil";
-import NavBar from './components/NavBar';
+import NavbarTest from './components/NavbarTest';
 import CommerceForm from './components/CommerceForm';
 import EvenementForm from './components/EvenementForm';
 import ProduitForm from './components/ProduitForm';
 import PromotionForm from './components/PromotionForm';
+import { AuthProvider } from "./components/AuthContext";
+import ContactForm from "./components/ContactForm";
+
+import 'bootstrap/dist/css/bootstrap.min.css';  // CSS de Bootstrap
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // JS de Bootstrap
+
+import Accueil from "./pages/AccueilCommercant";
+import PageAcceuilVisiteur from "./pages/PageAcceuilVisiteur";
+import FAQ from "./pages/FAQ";
+import Commandes from "./pages/Commandes";
+import AvisClientsPanel from "./pages/AvisClients";
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -30,39 +41,51 @@ function App() {
   }
 
   return (
+    <AuthProvider>
     <div className="App">
       <Router>
+        <NavbarTest isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
 
-        <NavBar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
-        
         <Routes>
-          {/* Page d'accueil (protégée) */}
+          <Route path="/" element={<PageAcceuilVisiteur />} />
+
+          {/* Route protégée pour la page d'accueil */}
           <Route
-            path="/"
+            path="/accueil"
             element={
               isAuthenticated ? (
-                <Accueil />
+                localStorage.getItem("role") === "commercant" ? (
+                  <Accueil /> // Page d'accueil commerçant
+                ) : (
+                  <PageAcceuilVisiteur /> // Page d'accueil visiteur
+                )
               ) : (
                 <Navigate to="/login" />
               )
             }
           />
+
           {/* Route pour la connexion */}
           <Route
             path="/login"
-            element={isAuthenticated ? <Navigate to="/" /> : <Connexion setIsAuthenticated={setIsAuthenticated} />}
+            element={isAuthenticated ? <Navigate to="/accueil" /> : <Connexion setIsAuthenticated={setIsAuthenticated} />}
           />
+
           <Route path="/register" element={<InscUtil />} />
-          
+
           {/* Formulaires protégés, accessibles uniquement si authentifié */}
-          <Route path="/accueil" element={isAuthenticated ? <Accueil /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/formulaire/commerce" element={isAuthenticated ? <CommerceForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/formulaire/evenement" element={isAuthenticated ? <EvenementForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/formulaire/produit" element={isAuthenticated ? <ProduitForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/formulaire/promotion" element={isAuthenticated ? <PromotionForm /> : <Connexion setIsAuthenticated={setIsAuthenticated} />} />
+          <Route path="/FAQ" element={<FAQ />} />
+          <Route path="/commandes" element={<Commandes />} />
+          <Route path="/avis-clients" element={<AvisClientsPanel/>}/>
+          <Route path="/contact" element={<ContactForm/>}/>
         </Routes>
       </Router>
     </div>
+    </AuthProvider>
   );
 }
 

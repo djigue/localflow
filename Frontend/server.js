@@ -345,8 +345,27 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('sendContactMessage', async (data) => {
+    console.log(`📩 Données message : `, data);
+  
+    try {
+      const response = await axios.get(`http://localhost:8000/api/message`, {
+        nom: data.nom,
+        email: data.email,
+        message: data.message,
+        user_id: data.user_id,
+      });
+      socket.emit('contactResponse', response.data);
+      console.log("données recues : ", response.data );
+    } catch (error) {
+      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
+      socket.emit('contactResponse', { error: "Erreur serveur" });
+    }
+  });
+
 
   socket.on('disconnect', () => {
     console.log('❌ Un client s\'est déconnecté');
   });
 });
+

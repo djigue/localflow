@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
+#[ORM\Table(name: "utilisateur")]
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -64,9 +65,16 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Commerces::class, mappedBy: 'commercant', orphanRemoval: true)]
     private Collection $commerces;
 
+    /**
+     * @var Collection<int, Messages>
+     */
+    #[ORM\OneToMany(targetEntity: Messages::class, mappedBy: 'destinataire', orphanRemoval: true)]
+    private Collection $messages;
+
     public function __construct()
     {
         $this->commerces = new ArrayCollection();
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -290,6 +298,36 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function getCommerceIds(): array
     {
        return $this->commerces->map(fn($commerce) => $commerce->getId())->toArray();
+    }
+
+    /**
+     * @return Collection<int, Messages>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Messages $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setDestinataire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Messages $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getDestinataire() === $this) {
+                $message->setDestinataire(null);
+            }
+        }
+
+        return $this;
     }
 
 
