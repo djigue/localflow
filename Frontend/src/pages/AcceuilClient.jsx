@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import socket from '../socket';
+import BarreRecherche from '../components/BarreRecherche';
 import CardArticle from '../components/CardArticles';
 
 const PageAcceuilVisiteur = () => {
@@ -16,7 +17,6 @@ const PageAcceuilVisiteur = () => {
     useEffect(() => {
         socket.emit('acceuilClient', userId);
         socket.on("acceuilClientResponse", (data) => {
-            console.log("📩 Réponse reçue du serveur :", data);
             setAcceuil(data);
         });
 
@@ -29,6 +29,7 @@ const PageAcceuilVisiteur = () => {
 
     return (
         <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+            <BarreRecherche />
             <h2 style={{ textAlign: 'center' }}>Bienvenue {acceuil.prenom}</h2>
 
             <section style={{ marginTop: '40px' }}>

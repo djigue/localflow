@@ -15,7 +15,6 @@ const Panier = () => {
         socket.emit("panier", userId);
 
         socket.on("panierResponse", (data) => {
-            console.log("📩 Réponse reçue du serveur :", data);
             setPanier(data);
         });
 

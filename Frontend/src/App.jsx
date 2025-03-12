@@ -51,11 +51,13 @@ function App() {
                   <AcceuilClient />
                 ) : role === "commercant" ? (
                   <Accueil />
+                ) : role === "admin" ? (
+                  <AdminPanel />
                 ) : (
                   <Navigate to="/login" />
                 )
               ) : (
-                <Navigate to="/login" />
+                  <Navigate to="/login" />
               )
             }
           />

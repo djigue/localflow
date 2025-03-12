@@ -18,6 +18,7 @@ use App\Repository\ServicesRepository;
 use App\Repository\EvenementsRepository;
 use App\Repository\UtilisateurRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse; 
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -188,5 +189,39 @@ class ClientController extends AbstractController
             'evenements' => $evenements ?? []
         ]);
     }
+
+    #[Route('/api/search', name: 'app_search', methods: ['GET'])]
+    public function search(Request $request, EntityManagerInterface $entityManager): JsonResponse     { 
+
+        $query = $request->query->get('q');
+
+        if (!$query) { 
+            return $this->json(['error' => 'Aucun terme de recherche fourni'], 400);        
+        }         
+        
+        $tables = ['Produit', 'Service', 'Commerce', 'Promotion', 'Evenement'];         
+        $results = [];         
+        
+        foreach ($tables as $table) {             
+            $repo = $entityManager->getRepository('App\Entity\\' . $table);
+            $entities = $repo->createQueryBuilder('e')                 
+               ->where('e.nom LIKE :query')                 
+               ->setParameter('query', "%$query%")                 
+               ->setMaxResults(5)                 
+               ->getQuery()                 
+               ->getResult();             
+               
+        if ($entities) {                 
+            $results[$table] = array_map(fn($entity) => [                     
+                'id' => $entity->getId(),                     
+                'nom' => $entity->getNom(),                     
+                'type' => $table,                 
+            ], $entities);             
+        }         
+    }         
+    
+    return $this->json($results);     
+    }
+
 }
 

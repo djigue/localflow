@@ -25,10 +25,8 @@ server.listen(PORT, () => {
 
 // Gérer les connexions WebSocket
 io.on('connection', (socket) => {
-  console.log('✅ Un client est connecté');
 
   socket.on('inscription', async (data) => {
-    console.log('📩 Formulaire d\'inscription reçu:', data);
 
     try {
       const response = await axios.post('http://localhost:8000/api/utilisateur/inscription', {
@@ -47,16 +45,13 @@ io.on('connection', (socket) => {
         roles: data.role,
       });
 
-      console.log('✅ Utilisateur enregistré dans Symfony');
       socket.emit('signupResponse', { success: true, message: 'Utilisateur créé avec succès' });
     } catch (error) {
-      console.error('❌ Erreur lors de l\'inscription:', error.response?.data || error.message);
       socket.emit('signupResponse', { success: false, message: 'Erreur d\'inscription' });
     }
   });
 
   socket.on('connexion', async (data) => {
-    console.log('📩 Formulaire de connexion reçu:', data);
 
     try {
       const response = await axios.post('http://localhost:8000/api/utilisateur/connexion', {
@@ -64,17 +59,14 @@ io.on('connection', (socket) => {
         password: data.password,
       });
 
-      console.log('✅ Utilisateur validé par Symfony token : ', response.data);
       socket.emit('connexionResponse', { success: true, message: 'Connexion réussie', token: response.data.token,
                   user_id: response.data.user_id, user_email: response.data.user_email, user_role: response.data.user_role, commerce_id: response.data.user_commerce });
     } catch (error) {
-      console.error('❌ Erreur lors de la connexion:', error.response?.data || error.message);
       socket.emit('loginResponse', { success: false, message: 'Erreur de connexion' });
     }
   });
 
   socket.on('deconnexion', async (data) => {
-    console.log('📩 Formulaire de deconnexion:', data);
 
     try {
       const response = await axios.post('http://localhost:8000/api/utilisateur/deconnexion', {
@@ -82,23 +74,13 @@ io.on('connection', (socket) => {
         user_id: data.user_id
       });
 
-      console.log('✅ Utilisateur deco par Symfony');
       socket.emit('deconnexionReponse', { success: true, message: 'Déconnexion réussie'});
     } catch (error) {
-      console.error('❌ Erreur lors de la connexion:', error.response?.data || error.message);
       socket.emit('deconnexionReponse', { success: false, message: 'Erreur de déconnexion' });
     }
   });
 
   socket.on('commerceCreation', async (data) => {
-
-    console.log('📩 Formulaire de création :', data);
-
-    if (data.imageBlobs && Array.isArray(data.imageBlobs)) {
-      console.log("Images reçues (ArrayBuffer) :", data.imageBlobs);
-  } else {
-      console.log('Aucune image reçue ou format incorrect');
-  }
 
     try {
 
@@ -131,7 +113,6 @@ io.on('connection', (socket) => {
       },
       });
 
-      console.log('✅ Commerce créé par Symfony');
       socket.emit('commerceCreationReponse', {
          success: true,
          message: 'Commerce créé avec succès',
@@ -139,20 +120,11 @@ io.on('connection', (socket) => {
          commerce_id: response.data.commerce_id
       });
     } catch (error) {
-      console.error('❌ Erreur lors de la connexion:', error.response?.data || error.message);
       socket.emit('commerceCreationReponse', { success: false, message: 'Le commerce n\'a pu être créé' });
     }
   });
 
   socket.on('evenementCreation', async (data) => {
-
-    console.log('📩 Formulaire evenement :', data);
-
-    if (data.imageBlobs && Array.isArray(data.imageBlobs)) {
-      console.log("Images reçues (ArrayBuffer) :", data.imageBlobs);
-  } else {
-      console.log('Aucune image reçue ou format incorrect');
-  }
 
     try {
 
@@ -185,26 +157,16 @@ io.on('connection', (socket) => {
       },
       });
 
-      console.log('✅ evenement créé par Symfony');
       socket.emit('evenementCreationReponse', {
          success: true,
          message: 'evenementcréé avec succès',
       });
     } catch (error) {
-      console.error('❌ Erreur lors de la connexion:', error.response?.data || error.message);
       socket.emit('evenementCreationReponse', { success: false, message: 'Le commerce n\'a pu être créé' });
     }
   });
 
   socket.on('produitCreation', async (data) => {
-
-    console.log('📩 Formulaire produit :', data);
-
-  //   if (data.imageBlobs && Array.isArray(data.imageBlobs)) {
-  //     console.log("Images reçues (ArrayBuffer) :", data.imageBlobs);
-  // } else {
-  //     console.log('Aucune image reçue ou format incorrect');
-  // }
 
     try {
 
@@ -232,26 +194,16 @@ io.on('connection', (socket) => {
       },
       });
 
-      console.log('✅ produit créé par Symfony');
       socket.emit('produitCreationReponse', {
          success: true,
          message: 'produit créé avec succès',
       });
     } catch (error) {
-      console.error('❌ Erreur lors de la connexion:', error.response?.data || error.message);
       socket.emit('produitCreationReponse', { success: false, message: 'Le produit n\'a pu être créé' });
     }
   });
 
   socket.on('serviceCreation', async (data) => {
-
-    console.log('📩 Formulaire service :', data);
-
-  //   if (data.imageBlobs && Array.isArray(data.imageBlobs)) {
-  //     console.log("Images reçues (ArrayBuffer) :", data.imageBlobs);
-  // } else {
-  //     console.log('Aucune image reçue ou format incorrect');
-  // }
 
     try {
 
@@ -276,26 +228,16 @@ io.on('connection', (socket) => {
       },
       });
 
-      console.log('✅ service créé par Symfony');
       socket.emit('serviceCreationReponse', {
          success: true,
          message: 'service créé avec succès',
       });
     } catch (error) {
-      console.error('❌ Erreur lors de la connexion:', error.response?.data || error.message);
       socket.emit('serviceCreationReponse', { success: false, message: 'Le service n\'a pu être créé' });
     }
   });
 
   socket.on('promotionCreation', async (data) => {
-
-    console.log('📩 Formulaire promotion :', data);
-
-  //   if (data.imageBlobs && Array.isArray(data.imageBlobs)) {
-  //     console.log("Images reçues (ArrayBuffer) :", data.imageBlobs);
-  // } else {
-  //     console.log('Aucune image reçue ou format incorrect');
-  // }
 
     try {
 
@@ -321,71 +263,56 @@ io.on('connection', (socket) => {
       },
       });
 
-      console.log('✅ promotion créé par Symfony');
       socket.emit('promotionCreationReponse', {
          success: true,
          message: 'promotion créé avec succès',
       });
     } catch (error) {
-      console.error('❌ Erreur lors de la connexion:', error.response?.data || error.message);
       socket.emit('promotionCreationReponse', { success: false, message: 'La promotion n\'a pu être créé' });
     }
   });
 
   socket.on('commercantInfo', async (userId) => {
-    console.log(`📩 Demande d'informations pour le commerçant ${userId}`);
   
     try {
       const response = await axios.get(`http://localhost:8000/api/commercant/${userId}`);
       socket.emit('commercantInfoResponse', response.data);
-      console.log("données recues : ", response.data )
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
       socket.emit('commercantInfoResponse', { error: "Erreur serveur" });
     }
   });
 
   socket.on('produits', async (userId) => {
-    console.log(`En route pour Produits`);
   
     try {
       const response = await axios.get(`http://localhost:8000/api/produits`);
       socket.emit('produitsResponse', response.data);
-      console.log("données recues : ", response.data )
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
       socket.emit('produitsResponse', { error: "Erreur serveur" });
     }
   });
 
   socket.on('services', async (userId) => {
-    console.log(`En route pour Services`);
   
     try {
       const response = await axios.get(`http://localhost:8000/api/services`);
       socket.emit('servicesResponse', response.data);
-      console.log("données recues : ", response.data )
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
       socket.emit('servicesResponse', { error: "Erreur serveur" });
     }
   });
 
   socket.on('promotions', async (userId) => {
-    console.log(`En route pour Promotions`);
   
     try {
       const response = await axios.get(`http://localhost:8000/api/promotions`);
       socket.emit('promotionsResponse', response.data);
-      console.log("données recues : ", response.data )
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
       socket.emit('promotionsResponse', { error: "Erreur serveur" });
     }
   });
 
   socket.on('ajoutProduitPanier', async (data) => {
-    console.log('📩 Formulaire ajout panier :', data);
   
     try {
       const response = await axios.post(`http://localhost:8000/api/panier/ajoutProduit`, {
@@ -395,13 +322,11 @@ io.on('connection', (socket) => {
       });
       socket.emit('ajoutProduitPanierResponse', { success: true, message: 'Produit ajouté au panier' });
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
       socket.emit('ajoutProduitPanierResponse', { success: false, message: 'Erreur d\'ajout' });
     }
   });
 
   socket.on('ajoutServicePanier', async (data) => {
-    console.log('📩 Formulaire ajout panier :', data);
   
     try {
       const response = await axios.post(`http://localhost:8000/api/panier/ajoutService`, {
@@ -411,13 +336,11 @@ io.on('connection', (socket) => {
       });
       socket.emit('ajoutServicePanierResponse', { success: true, message: 'Service ajouté au panier' });
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
       socket.emit('ajoutServicePanierResponse', { success: false, message: 'Erreur d\'ajout' });
     }
   });
 
   socket.on('ajoutPromotionPanier', async (data) => {
-    console.log('📩 Formulaire ajout panier :', data);
   
     try {
       const response = await axios.post(`http://localhost:8000/api/panier/ajoutPromotion`, {
@@ -427,38 +350,40 @@ io.on('connection', (socket) => {
       });
       socket.emit('ajoutPromotionPanierResponse', { success: true, message: 'Promotion ajouté au panier' });
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
       socket.emit('ajoutPromotionPanierResponse', { success: false, message: 'Erreur d\'ajout' });
     }
   });
 
   socket.on('panier', async (userId) => {
-    console.log(`📩 Demande d'informations pour le panier ${userId}`);
   
     try {
       const response = await axios.get(`http://localhost:8000/api/panier/${userId}`);
       socket.emit('panierResponse', response.data);
-      console.log("données recues : ", response.data )
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
       socket.emit('panierResponse', { error: "Erreur serveur" });
     }
   });
 
   socket.on('acceuilClient', async (userId) => {
-    console.log(`📩 Demande d'informations pour l' acceuil client, ${userId}`);
   
     try {
       const response = await axios.get(`http://localhost:8000/api/acceuilClient/${userId}`);
       socket.emit('acceuilClientResponse', response.data);
-      console.log("données recues : ", response.data )
     } catch (error) {
-      console.error("❌ Erreur lors de la récupération des informations :", error.response?.data || error.message);
       socket.emit('acceuilClientResponse', { error: "Erreur serveur" });
     }
   });
 
+  socket.on('recherche', async (query) => {
+  
+    try {
+      const response = await axios.get(`http://localhost:8000/api/recherche`);
+      socket.emit('recherheResponse', response.data);
+    } catch (error) {
+      socket.emit('rechercheResponse', { error: "Erreur serveur" });
+    }
+  });
+
   socket.on('disconnect', () => {
-    console.log('❌ Un client s\'est déconnecté');
   });
 });
