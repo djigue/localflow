@@ -16,6 +16,8 @@ class PromotionsRepository extends ServiceEntityRepository
         parent::__construct($registry, Promotions::class);
     }
 
+
+
     //    /**
     //     * @return Promotions[] Returns an array of Promotions objects
     //     */

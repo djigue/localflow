@@ -335,6 +335,17 @@ class Commerces
         return $this;
     }
 
+        public function setImage(?string $image): self
+    {
+        $firstImage = $this->imagesCommerces->first();
+
+        if ($firstImage) {
+            $firstImage->setUrl($image);
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Evenements>
      */

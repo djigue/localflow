@@ -50,10 +50,24 @@ class Services
     #[ORM\OneToMany(targetEntity: Promotions::class, mappedBy: 'service')]
     private Collection $promotions;
 
+    /**
+     * @var Collection<int, Panier>
+     */
+    #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'service')]
+    private Collection $paniers;
+
+    /**
+     * @var Collection<int, PaniersServices>
+     */
+    #[ORM\OneToMany(targetEntity: PaniersServices::class, mappedBy: 'service', orphanRemoval: true)]
+    private Collection $paniersServices;
+
     public function __construct()
     {
         $this->imagesServices = new ArrayCollection();
         $this->promotions = new ArrayCollection();
+        $this->paniers = new ArrayCollection();
+        $this->paniersServices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -175,6 +189,17 @@ class Services
         return $this;
     }
 
+    public function setImage(?string $image): self
+    {
+        $firstImage = $this->imagesServices->first();
+
+        if ($firstImage) {
+            $firstImage->setUrl($image);
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Promotions>
      */
@@ -199,6 +224,66 @@ class Services
             // set the owning side to null (unless already changed)
             if ($promotion->getService() === $this) {
                 $promotion->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Panier>
+     */
+    public function getPaniers(): Collection
+    {
+        return $this->paniers;
+    }
+
+    public function addPanier(Panier $panier): static
+    {
+        if (!$this->paniers->contains($panier)) {
+            $this->paniers->add($panier);
+            $panier->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): static
+    {
+        if ($this->paniers->removeElement($panier)) {
+            // set the owning side to null (unless already changed)
+            if ($panier->getService() === $this) {
+                $panier->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PaniersServices>
+     */
+    public function getPaniersServices(): Collection
+    {
+        return $this->paniersServices;
+    }
+
+    public function addPaniersService(PaniersServices $paniersService): static
+    {
+        if (!$this->paniersServices->contains($paniersService)) {
+            $this->paniersServices->add($paniersService);
+            $paniersService->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaniersService(PaniersServices $paniersService): static
+    {
+        if ($this->paniersServices->removeElement($paniersService)) {
+            // set the owning side to null (unless already changed)
+            if ($paniersService->getService() === $this) {
+                $paniersService->setService(null);
             }
         }
 
