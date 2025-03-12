@@ -14,7 +14,7 @@ class ServicesRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Services::class);
-    }
+    } 
 
     //    /**
     //     * @return Services[] Returns an array of Services objects

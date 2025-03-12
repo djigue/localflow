@@ -243,4 +243,15 @@ class Evenements
 
         return $this;
     }
+
+    public function setImage(?string $image): self
+    {
+        $firstImage = $this->imagesEvenements->first();
+
+        if ($firstImage) {
+            $firstImage->setUrl($image);
+        }
+
+        return $this;
+    }
 }
