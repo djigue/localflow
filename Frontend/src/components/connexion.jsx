@@ -11,7 +11,7 @@ const Connexion = ({ setIsAuthenticated }) => {
 
   useEffect(() => {
     socket.on("connexionResponse", (data) => {
-      console.log("Données de connexion:", data);  // Ajout du log pour inspecter les données
+  
 
       setMessage(data.success ? "Connexion réussie !" : "Erreur : " + data.message);
 
@@ -29,19 +29,19 @@ const Connexion = ({ setIsAuthenticated }) => {
 
         // Vérification du rôle de l'utilisateur avant redirection
         const role = data.user_role;
-        console.log("Role de l'utilisateur:", role);
+      
 
         if (!role) {
-          console.error("Rôle utilisateur non défini !");
+          
           navigate("/");  // Redirige vers la page d'accueil par défaut
         } else if (role === "admin") {
-          console.log("Redirection vers panelAdmin");
+      
           navigate("/panelAdmin");
         } else if (role === "commercant") {
-          console.log("Redirection vers accueil commerçant");
+         
           navigate("/accueil");
         } else {
-          console.log("Redirection vers page d'accueil visiteur");
+        
           navigate("/");
         }
       }

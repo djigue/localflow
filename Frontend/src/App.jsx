@@ -19,11 +19,13 @@ import PageAcceuilVisiteur from "./pages/PageAcceuilVisiteur";
 import FAQ from "./pages/FAQ";
 import Commandes from "./pages/Commandes";
 import AvisClientsPanel from "./pages/AvisClients";
-import AdminPanel from "./pages/PanelAdmin";
+import AdminPanel from "./pages/AdminPanel";
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const role = localStorage.getItem('role');
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -51,25 +53,26 @@ function App() {
 
             {/* Route protégée pour la page d'accueil */}
             <Route
-              path="/accueil"
-              element={
-                isAuthenticated ? (
-                  localStorage.getItem("role") === "commercant" ? (
-                    <Accueil /> // Page d'accueil commerçant
-                  ) : (
-                    <PageAcceuilVisiteur /> // Page d'accueil visiteur
-                  )
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
+  path="/login"
+  element={
+    isAuthenticated ? (
+      role === "client" ? (
+        <PageAcceuilVisiteur />
+      ) : role === "commercant" ? (
+        <Accueil />
+      ) : role === "admin" ? (
+        <AdminPanel />
+      ) : (
+        <Navigate to="/accueil" /> // Évite une boucle infinie
+      )
+    ) : (
+      <Connexion setIsAuthenticated={setIsAuthenticated} />
+    )
+  }
+/>
 
-            {/* Route pour la connexion */}
-            <Route
-              path="/login"
-              element={isAuthenticated ? <Navigate to="/accueil" /> : <Connexion setIsAuthenticated={setIsAuthenticated} />}
-            />
+
+
 
             <Route path="/register" element={<InscUtil />} />
 
@@ -82,20 +85,12 @@ function App() {
             <Route path="/commandes" element={<Commandes />} />
             <Route path="/avis-clients" element={<AvisClientsPanel />} />
             <Route path="/contact" element={<ContactForm />} />
+            <Route path="/accueil" element={<PageAcceuilVisiteur />} />
+            <Route path="/panelAdmin" element={<AdminPanel />} />
 
-            {/* Route pour le panneau admin */}
-            <Route
-              path="/panelAdmin"
-              element={
-                isAuthenticated && localStorage.getItem("role") === "admin" ? (
-                  <AdminPanel />  // Panneau administrateur
-                ) : (
-                  <Navigate to="/login" />  // Redirection si non authentifié ou pas admin
-                )
-                
-              }
-            />
             
+
+
           </Routes>
         </Router>
       </div>

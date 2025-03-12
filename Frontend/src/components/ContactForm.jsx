@@ -13,7 +13,7 @@ const MessageForm = () => {
       .then(data => {
         setDestinataires(data.destinataires);
       })
-      .catch(error => console.error('Erreur lors de la récupération des destinataires:', error));
+    
 
     // Simuler l'utilisateur connecté (à remplacer par un appel réel à l'API si nécessaire)
     setUser({ id: 1, name: 'Jean Dupont' });
@@ -51,7 +51,7 @@ const MessageForm = () => {
         }
       })
       .catch(error => {
-        console.error('Erreur lors de l\'envoi du message:', error);
+     
       });
   };
 

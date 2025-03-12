@@ -29,15 +29,15 @@ const LogoutButton = ({ setIsAuthenticated }) => {
   const handleLogout = () => {
     const token = localStorage.getItem('token');
     const userId = Number(localStorage.getItem('id'));
-    console.log('user-id : ',userId);
+ 
 
     try {
       // Envoyer l'événement de déconnexion au serveur via WebSocket
       socket.emit('deconnexion', {token, user_id: userId});
-      console.log('Déconnexion réussie');
+    
       navigate('/login');
     } catch (error) {
-      console.error('Erreur lors de la déconnexion:', error);
+     
     }
   };
 

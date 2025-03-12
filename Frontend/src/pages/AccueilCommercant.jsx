@@ -4,20 +4,20 @@ import socket from "../socket";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const AccueilCommercant = () => {
-  console.log("🏠 Composant Accueil monté !");
+ 
   const [commercantData, setCommercantData] = useState(null);
   const [error, setError] = useState(null);
   const userId = localStorage.getItem("id");
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("🔍 userId récupéré:", userId);
+
     if (!userId) return;
 
     socket.emit('commercantInfo', userId);
 
     socket.on("commercantInfoResponse", (data) => {
-      console.log("📩 Réponse reçue du serveur :", data);
+    
       setCommercantData(data);
     });
 

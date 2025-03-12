@@ -38,7 +38,16 @@ const NavbarTest = ({ isAuthenticated, setIsAuthenticated }) => {
                 <li className="nav-item">
                   <Link className="nav-link" to="/accueil">Accueil</Link>
                 </li>
-
+                {role === "admin" && (
+  <>
+    <li className="nav-item">
+      <Link className="nav-link" to="/panelAdmin">Panel Admin</Link>
+    </li>
+    <li className="nav-item">
+      <Link className="nav-link" to="/gestion-utilisateurs">Gestion Utilisateurs</Link>
+    </li>
+  </>
+)}
                 {role === "commercant" ? (
                   <>
 

@@ -40,7 +40,7 @@ function PromotionForm() {
             nom, slug, description, dateDebut, dateFin, reduction, formatReduction, commerce_id, imageBlobs
         });
     } catch (error) {
-        console.error('Erreur lors de la conversion des images en ArrayBuffer:', error);
+      
         setMessage('Erreur lors de la préparation des images');   
     }
   };

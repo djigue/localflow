@@ -47,7 +47,7 @@ function ProduitForm() {
  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Type : ', type)
+  
     if(type === 'produit') {
 
     // if (!nom || !prix || !quantite || !alerte || !formatPrix) {
@@ -65,7 +65,7 @@ function ProduitForm() {
             nom, slug, description, quantite, alerte, prix, formatPrix, taille, commerce_id, user_id, imageBlobs
         });
     } catch (error) {
-        console.error('Erreur lors de la conversion des images en ArrayBuffer:', error);
+      
         setMessage('Erreur lors de la préparation des images');
     }
    }
@@ -86,7 +86,7 @@ function ProduitForm() {
             nom, slug, description, prix, duree, reservation, commerce_id, imageBlobs
         });
     } catch (error) {
-        console.error('Erreur lors de la conversion des images en ArrayBuffer:', error);
+   
         setMessage('Erreur lors de la préparation des images');
     }
    }
