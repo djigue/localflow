@@ -2,14 +2,24 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
-    # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    # Active la protection CSRF pour les formulaires
+    form:
+        csrf_protection: true
 
-    #esi: true
-    #fragments: true
+    # Activation de la protection CSRF globalement (si nécessaire)
+    csrf_protection: true
+
+    # Session : gestion par défaut avec stockage natif
+    session:
+        handler_id: null  # Utilisation du gestionnaire par défaut
+        storage_factory_id: session.storage.factory.native  # Utilise le stockage natif des sessions
+
+    # Autres options que tu peux activer si nécessaire
+    # esi: true
+    # fragments: true
 
 when@test:
     framework:
         test: true
         session:
-            storage_factory_id: session.storage.factory.mock_file
+            storage_factory_id: session.storage.factory.mock_file  # Utilise une session simulée pour les tests
